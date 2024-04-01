@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(rQ -> {
                     rQ.requestMatchers("/clients/**").permitAll();
                     rQ.requestMatchers("/employes/**").permitAll();
+                    rQ.requestMatchers("/services/**").permitAll();
                     rQ.requestMatchers("/auth/**").permitAll();
                     rQ.anyRequest().authenticated();
                 })
