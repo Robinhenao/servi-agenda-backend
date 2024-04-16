@@ -44,7 +44,20 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(String name, String lastName, int userId, String phone, String email, String password, Role role) {
+    @Column(name = "is_account_non_expired")
+    Boolean isAccountNonExpired;
+
+    @Column(name = "is_account_non_locked")
+    Boolean isAccountNonLocked;
+
+    @Column(name = "is_credentials_non_expired")
+    Boolean isCredentialsNonExpired;
+
+    @Column(name = "is_enabled")
+    Boolean isEnabled;
+
+
+    public User(String name, String lastName, int userId, String phone, String email, String password, Role role, Boolean isAccountNonExpired, Boolean isAccountNonLocked, Boolean isCredentialsNonExpired, Boolean isEnabled) {
         this.name = name;
         this.lastName = lastName;
         this.userId = userId;
@@ -52,29 +65,14 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
         this.role = role;
-    }
-    public static User createUserClient(UserRegistrationClientData userRegistrationClientData, PasswordEncoder passwordEncoder) {
-        String encodedPassword = passwordEncoder.encode(userRegistrationClientData.password());
-        return new User(
-                userRegistrationClientData.name(),
-                userRegistrationClientData.lastName(),
-                userRegistrationClientData.userId(),
-                userRegistrationClientData.phone(),
-                userRegistrationClientData.email(),
-                encodedPassword,
-                Role.CLIENT);
+        this.isAccountNonExpired = isAccountNonExpired;
+        this.isAccountNonLocked = isAccountNonLocked;
+        this.isCredentialsNonExpired = isCredentialsNonExpired;
+        this.isEnabled = isEnabled;
     }
 
-    public static User createUserEmploye(UserRegistrationData userRegistrationData, PasswordEncoder passwordEncoder) {
-        String encodedPassword = passwordEncoder.encode(userRegistrationData.password());
-        return new User(
-                userRegistrationData.name(),
-                userRegistrationData.lastName(),
-                userRegistrationData.userId(),
-                userRegistrationData.phone(),
-                userRegistrationData.email(),
-                encodedPassword,
-                userRegistrationData.role());
+    public void deleteUser(){
+        this.isEnabled=false;
     }
 
     @Override
@@ -92,22 +90,22 @@ public class User implements UserDetails {
     }
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return this.isAccountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.isAccountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return this.isCredentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.isEnabled;
     }
 
 }

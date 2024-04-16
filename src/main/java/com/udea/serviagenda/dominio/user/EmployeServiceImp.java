@@ -1,9 +1,9 @@
 package com.udea.serviagenda.dominio.user;
 
 import com.udea.serviagenda.dominio.user.dto.UserData;
-import com.udea.serviagenda.dominio.user.dto.UserRegistrationClientData;
+import com.udea.serviagenda.dominio.user.dto.UserRegistrationData;
 import com.udea.serviagenda.dominio.user.dto.UserUpdateData;
-import com.udea.serviagenda.dominio.user.interfaces.UserService;
+import com.udea.serviagenda.dominio.user.interfaces.EmployeService;
 import com.udea.serviagenda.dominio.user.model.Role;
 import com.udea.serviagenda.dominio.user.model.User;
 import com.udea.serviagenda.dominio.user.validations.UserValidator;
@@ -17,24 +17,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserServiceImp implements UserService {
+public class EmployeServiceImp implements EmployeService {
 
     private UserRepository userRepository;
     private List<UserValidator> validators;
     private PasswordEncoder passwordEncoder;
 
-    public UserServiceImp(UserRepository userRepository, List<UserValidator> validators, PasswordEncoder passwordEncoder) {
+    public EmployeServiceImp(UserRepository userRepository, List<UserValidator> validators, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.validators = validators;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserData registerUserClient(UserRegistrationClientData userRegistrationClientData) {
+    public UserData registerUserEmploye(UserRegistrationData userRegistrationData) {
         List<CustomValidationException> exceptions = new ArrayList<>();
         validators.forEach(v -> {
             try {
-                v.validate(userRegistrationClientData);
+                v.validate(userRegistrationData);
             } catch (CustomValidationException e) {
                 exceptions.add(e);
             }
@@ -42,15 +42,15 @@ public class UserServiceImp implements UserService {
         if (!exceptions.isEmpty()) {
             throw new DataIntegrityValidationException(exceptions);
         }
-        String encodedPassword = passwordEncoder.encode(userRegistrationClientData.password());
+        String encodedPassword = passwordEncoder.encode(userRegistrationData.password());
         User user = new User(
-                userRegistrationClientData.name(),
-                userRegistrationClientData.lastName(),
-                userRegistrationClientData.userId(),
-                userRegistrationClientData.phone(),
-                userRegistrationClientData.email(),
+                userRegistrationData.name(),
+                userRegistrationData.lastName(),
+                userRegistrationData.userId(),
+                userRegistrationData.phone(),
+                userRegistrationData.email(),
                 encodedPassword,
-                Role.CLIENT,
+                userRegistrationData.role(),
                 true,
                 true,
                 true,
@@ -60,7 +60,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserData updateUserClient(UserUpdateData userUpdateData) {
+    public UserData updateUserEmploye(UserUpdateData userUpdateData) {
         List<CustomValidationException> exceptions = new ArrayList<>();
         validators.forEach(v -> {
             try {
@@ -73,28 +73,26 @@ public class UserServiceImp implements UserService {
             throw new DataIntegrityValidationException(exceptions);
         }
         User user = userRepository.findByIdUser(userUpdateData.idUser());
-        BeanUtils.copyProperties(userUpdateData, user, "id", "password", "enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked");
+        BeanUtils.copyProperties(userUpdateData, user, "id", "enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked");
         user = userRepository.save(user);
         return new UserData(user);
     }
 
     @Override
-    public UserData getUserClient(int userId) {
-        return this.userRepository.findByUserIdAndRole( userId,Role.CLIENT);
+    public UserData getUserEmploye(int userId) {
+        return this.userRepository.findByUserIdAndRoleNot(userId, Role.CLIENT);
     }
 
     @Override
-    public List<UserData> getUserClients() {
-        return this.userRepository.findByRole(Role.CLIENT);
+    public List<UserData> getUserEmployes() {
+        return this.userRepository.findAllByRoleNot(Role.CLIENT);
     }
 
     @Override
-    public UserData deleteUserClient(int idUser) {
+    public UserData deleteUserEmploye(int idUser) {
         User user = userRepository.findByIdUser(idUser);
         user.deleteUser();
         userRepository.save(user);
         return new UserData(user);
     }
-
-
 }
