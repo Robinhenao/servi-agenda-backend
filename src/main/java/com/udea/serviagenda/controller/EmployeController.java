@@ -29,7 +29,7 @@ public class EmployeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userData);
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<UserData> updateEmployee(@RequestBody UserUpdateData userUpdateData) {
         UserData userData = this.employeService.updateUserEmploye(userUpdateData);
         if (userData != null) {

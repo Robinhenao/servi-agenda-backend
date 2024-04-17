@@ -47,8 +47,8 @@ public class ClientController {
         return ResponseEntity.ok(userDatas);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserData> updateUserClient(@PathVariable int id, @RequestBody UserUpdateData userUpdateData) {
+    @PutMapping
+    public ResponseEntity<UserData> updateUserClient(@RequestBody UserUpdateData userUpdateData) {
         UserData userData = this.userService.updateUserClient(userUpdateData);
         return ResponseEntity.ok(userData);
     }

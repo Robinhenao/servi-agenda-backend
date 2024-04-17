@@ -64,7 +64,7 @@ public class UserServiceImp implements UserService {
         List<CustomValidationException> exceptions = new ArrayList<>();
         validators.forEach(v -> {
             try {
-                v.validate(userUpdateData);
+                //v.validate(userUpdateData);
             } catch (CustomValidationException e) {
                 exceptions.add(e);
             }
