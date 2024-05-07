@@ -17,6 +17,6 @@ public interface ServiceService {
 
     ServiceData updateService(ServiceUpdateData serviceUpdateData);
 
-    void deleteService(int idService);
+    ServiceData deleteService(int idService);
 
 }
