@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                     rQ.requestMatchers(PUT,"/services/**").hasAnyAuthority(ADMIN_UPDATE.name(), EMPLOYE_UPDATE.name());
                     rQ.requestMatchers(DELETE,"/services/**").hasAnyAuthority(ADMIN_DELETE.name(), EMPLOYE_DELETE.name());
                     rQ.requestMatchers("/auth/**").permitAll();
+                    rQ.requestMatchers("/citation/**").permitAll();
                     rQ.anyRequest().authenticated();
                 })
                 .cors(Customizer.withDefaults())

@@ -29,7 +29,7 @@ public class CitationServiceImpl implements CitationService {
     public CitationData registerCitation(CitationRegistrationData citationRegistrationData) {
         logger.debug("Attempting to create citation");
         Citation citation = new Citation(
-           citationRegistrationData.date(),
+                citationRegistrationData.date(),
                 citationRegistrationData.client(),
                 citationRegistrationData.service(),
                 citationRegistrationData.dateCreation()

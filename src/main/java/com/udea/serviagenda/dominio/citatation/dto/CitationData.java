@@ -9,8 +9,8 @@ import java.util.Date;
 public record CitationData(
         int id,
         Date date,
-        User client,
-        Service service,
+        int client,
+        int service,
         Date dateCreation
 ) {
     public CitationData(Citation citation) {

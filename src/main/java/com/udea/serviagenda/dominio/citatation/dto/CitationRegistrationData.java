@@ -7,8 +7,8 @@ import java.util.Date;
 
 public record CitationRegistrationData(
         Date date,
-        User client,
-        Service service,
+        int client,
+        int service,
         Date dateCreation
 ) {
 }

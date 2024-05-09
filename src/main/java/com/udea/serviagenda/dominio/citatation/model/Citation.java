@@ -27,13 +27,13 @@ public class Citation {
     @Column(nullable = false)
     private Date date;
 
-    @OneToOne
-    @JoinColumn(nullable = false)
-    private User client;
 
-    @OneToOne
-    @JoinColumn(nullable = false)
-    private Service service;
+    @Column(nullable = false)
+    private int client;
+
+
+    @Column(nullable = false)
+    private int service;
 
     @Column(nullable = false, name = "date_creation")
     private Date dateCreation;
@@ -41,12 +41,11 @@ public class Citation {
     @Column(nullable = false)
     private Boolean isAvailable;
 
-    public Citation(Date date, User client, Service service, Date dateCreation) {
+    public Citation(Date date, int client, int service, Date dateCreation) {
         this.date = date;
         this.client = client;
         this.service = service;
         this.dateCreation = dateCreation;
         this.isAvailable = true;
     }
-
 }

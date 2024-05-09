@@ -8,7 +8,7 @@ import java.util.Date;
 public record CitationUpdateData(
         int id,
         Date date,
-        User client,
-        Service service
+        int client,
+        int service
 ) {
 }
