@@ -9,5 +9,4 @@ public interface CitationRepository extends JpaRepository<Citation, Long> {
 
     Citation findById(int id);
 
-    void deleteById(int id);
 }

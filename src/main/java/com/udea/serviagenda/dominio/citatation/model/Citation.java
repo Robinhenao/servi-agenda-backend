@@ -24,15 +24,17 @@ public class Citation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private Date date;
     @Column(nullable = false)
+    private Date date;
+
+    @OneToOne
+    @JoinColumn(nullable = false)
     private User client;
 
-    @ManyToOne
-    @Column(nullable = false)
+    @OneToOne
+    @JoinColumn(nullable = false)
     private Service service;
 
-    @ManyToOne
     @Column(nullable = false, name = "date_creation")
     private Date dateCreation;
 
