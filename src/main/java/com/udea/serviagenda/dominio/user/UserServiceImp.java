@@ -46,7 +46,7 @@ public class UserServiceImp implements UserService {
             }
         });
         if (!exceptions.isEmpty()) {
-            logger.error("Validation failed: {}", exceptions);
+            logger.info("Validation failed: {}", exceptions);
             throw new DataIntegrityValidationException(exceptions);
         }
         String encodedPassword = passwordEncoder.encode(userRegistrationClientData.password());
@@ -63,7 +63,7 @@ public class UserServiceImp implements UserService {
                 true,
                 true);
         user = this.userRepository.save(user);
-        logger.info("User with ID {} create successfully", user.getUserId());
+        logger.error("User with ID {} create successfully", user.getUserId());
         return new UserData(user);
     }
 
