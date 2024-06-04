@@ -8,13 +8,16 @@ public record ServiceData(
         int idService,
         String description,
         double price,
-        Date creationDate) {
+        Date creationDate,
+        Boolean isdelete
+        ) {
     public ServiceData(Service service) {
         this(
                 service.getIdService(),
                 service.getDescription(),
                 service.getPrice(),
-                service.getCreationDate());
+                service.getCreationDate(),
+                service.getIsdelete());
     }
 
 

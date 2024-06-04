@@ -18,8 +18,12 @@ import java.util.List;
 public class ServiceServiceImp implements ServiceService {
     private static final Logger logger = LoggerFactory.getLogger(ServiceServiceImp.class);
 
-    @Autowired
+
     private ServiceRepository serviceRepository;
+    @Autowired
+    public ServiceServiceImp(ServiceRepository serviceRepository) {
+        this.serviceRepository = serviceRepository;
+    }
 
     @Override
     public ServiceData registerService(ServiceRegistrationData serviceRegistrationData) {
