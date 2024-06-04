@@ -15,7 +15,7 @@ public record ServiceUpdateData(
         @DecimalMin(value = "0.0", inclusive = false)
         double price,
         @NotNull
-        User employe
+        Long employe
 
 ) {
 }

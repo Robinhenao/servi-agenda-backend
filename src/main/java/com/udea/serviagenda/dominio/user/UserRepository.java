@@ -18,13 +18,21 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     User findByIdUser(int idUser);
-    List<UserData> findByRole(Role role);
 
-    List<UserData> findAllByRoleNot(Role role);
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleName")
+    List<UserData> findByRoleName(String roleName);
 
-    UserData findByUserIdAndRoleNot(int userId, Role role);
 
-    UserData findByUserIdAndRole(int userId, Role role);
+    @Query("SELECT u FROM User u WHERE u.id NOT IN (SELECT DISTINCT u2.id FROM User u2 JOIN u2.roles r WHERE r.name = :roleName)")
+    List<UserData>  findByRoleNameNot(String roleName);
+
+
+    @Query("SELECT u FROM User u WHERE u.idUser = :userId AND :roleName NOT MEMBER OF u.roles")
+    UserData findByUserIdAndRoleNameNot(int userId, String roleName);
+
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE u.idUser = :userId AND r.name = :roleName")
+    UserData findByUserIdAndRoleName(int userId, String roleName);
+
 
     boolean existsByUserId(int userid);
 }

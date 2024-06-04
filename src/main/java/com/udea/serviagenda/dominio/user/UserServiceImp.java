@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -57,7 +58,7 @@ public class UserServiceImp implements UserService {
                 userRegistrationClientData.phone(),
                 userRegistrationClientData.email(),
                 encodedPassword,
-                Role.CLIENT,
+                Collections.singleton(new Role("CLIENT")),
                 true,
                 true,
                 true,
@@ -80,7 +81,6 @@ public class UserServiceImp implements UserService {
             }
         });
         if (!exceptions.isEmpty()) {
-
             throw new DataIntegrityValidationException(exceptions);
         }
         User user = userRepository.findByIdUser(userUpdateData.idUser());
@@ -93,14 +93,14 @@ public class UserServiceImp implements UserService {
     @Override
     public UserData getUserClient(int userId) {
         logger.debug("Fetching user with ID: {}", userId);
-        return this.userRepository.findByUserIdAndRole( userId,Role.CLIENT);
+        return this.userRepository.findByUserIdAndRoleName( userId,"CLIENT");
 
     }
 
     @Override
     public List<UserData> getUserClients() {
         logger.debug("Fetching all clients");
-        return this.userRepository.findByRole(Role.CLIENT);
+        return this.userRepository.findByRoleName("CLIENT");
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -55,7 +56,7 @@ public class EmployeServiceImp implements EmployeService {
                 userRegistrationData.phone(),
                 userRegistrationData.email(),
                 encodedPassword,
-                userRegistrationData.role(),
+                Collections.singleton(new Role("CLIENT")),
                 true,
                 true,
                 true,
@@ -90,13 +91,13 @@ public class EmployeServiceImp implements EmployeService {
     @Override
     public UserData getUserEmploye(int userId) {
         logger.debug("Fetching user with ID: {}", userId);
-        return this.userRepository.findByUserIdAndRoleNot(userId, Role.CLIENT);
+        return this.userRepository.findByUserIdAndRoleNameNot(userId,"CLIENT");
     }
 
     @Override
     public List<UserData> getUserEmployes() {
         logger.debug("Fetching all users");
-        return this.userRepository.findAllByRoleNot(Role.CLIENT);
+        return this.userRepository.findByRoleNameNot("CLIENT");
     }
 
     @Override

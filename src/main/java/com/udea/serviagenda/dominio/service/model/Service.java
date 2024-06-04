@@ -27,9 +27,8 @@ public class Service {
     @Column(nullable = false)
     private double price;
 
-    @OneToOne
     @JoinColumn(name = "employe_id")
-    private User employe;
+    private Long employe;
 
     @Column(nullable = false, name = "creation_date")
     private Date creationDate;
@@ -37,7 +36,7 @@ public class Service {
     @Column(nullable = false)
     private Boolean isdelete;
 
-    public Service(String description, double price, User employe, Date creationDate) {
+    public Service(String description, double price, Long employe, Date creationDate) {
 
         this.description = description;
         this.price = price;

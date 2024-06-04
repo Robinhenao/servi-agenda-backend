@@ -1,8 +1,5 @@
 package com.udea.serviagenda.dominio.user.model;
 
-
-import com.udea.serviagenda.dominio.user.dto.UserRegistrationClientData;
-import com.udea.serviagenda.dominio.user.dto.UserRegistrationData;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -44,8 +41,14 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "id_user", referencedColumnName = "id_user"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
 
     @Column(name = "is_account_non_expired")
     Boolean isAccountNonExpired;
@@ -59,15 +62,14 @@ public class User implements UserDetails {
     @Column(name = "is_enabled")
     Boolean isEnabled;
 
-
-    public User(String name, String lastName, int userId, String phone, String email, String password, Role role, Boolean isAccountNonExpired, Boolean isAccountNonLocked, Boolean isCredentialsNonExpired, Boolean isEnabled) {
+    public User(String name, String lastName, int userId, String phone, String email, String password, Collection<Role> roles, Boolean isAccountNonExpired, Boolean isAccountNonLocked, Boolean isCredentialsNonExpired, Boolean isEnabled) {
         this.name = name;
         this.lastName = lastName;
         this.userId = userId;
         this.phone = phone;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
         this.isAccountNonExpired = isAccountNonExpired;
         this.isAccountNonLocked = isAccountNonLocked;
         this.isCredentialsNonExpired = isCredentialsNonExpired;
@@ -80,7 +82,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getAuthorities();
+        return roles.stream()
+                .flatMap(role -> role.getPrivileges().stream())
+                .map(privilege -> (GrantedAuthority) privilege::getName)
+                .collect(Collectors.toSet());
     }
     @Override
     public String getUsername() {

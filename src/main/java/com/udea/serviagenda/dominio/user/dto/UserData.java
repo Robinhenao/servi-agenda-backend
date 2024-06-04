@@ -18,6 +18,6 @@ public record UserData(
                 user.getUserId(),
                 user.getPhone(),
                 user.getEmail(),
-                user.getRole());
+                (Role) user.getRoles());
     }
 }
